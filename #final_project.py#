@@ -34,6 +34,9 @@ def main():
     cursor.execute('''SELECT name, phone, email, sign, language, interval FROM contacts''')
     for row in cursor:
         current_contact = messaging.Contact(row[0],row[1],row[2],row[3],row[4],row[5])
+    
+
+
     print ''
     
     
