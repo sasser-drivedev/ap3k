@@ -1,6 +1,0 @@
-{
-"chuck_norris":{"name": "chuck norris jokes", "url": "http://api.icndb.com/jokes/random/", "headers": "False","header_file": "None", "parameters": "False", "paraameter_file": "None"},
-"funny dog pics":{"name": "funny dog pics", "url": "https://nijikokun-thedogapi.p.mashape.com/random", "headers": "True","header_file": "dog_pics.headers","parameters": "False","paraameter_file": "None"},
-"memes":{"name": "memes", "url": "http://api.lordofthememe.com/v1/posts/random.json", "headers": "False","header_file": "None","parameters": "False","paraameter_file": "None"},
-"horoscope":{"name": "Horoscope", "url": "http://widgets.fabulously40.com/horoscope.json?", "headers": "False", "header_file": "None", "parameters": "True", "paraameter_file": "None"}
-}
