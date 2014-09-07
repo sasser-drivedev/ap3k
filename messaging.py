@@ -11,12 +11,13 @@ from twilio.rest import TwilioRestClient
 import smtplib, json
 
 class Contact():
-    def __init__(self, name, sms_number, email_address, sign, language):
+    def __init__(self, name, sms_number, email_address, sign, language, interval):
         self.name = name
         self.to = sms_number
         self.email = email_address
         self.sign = sign
         self.language = language
+        self.interval = interval
         config = open('messaging.cfg')
         credentials = json.load(config)
         global credentials 
