@@ -9,11 +9,8 @@
 
 '''
     
-
-import messaging, grabbers, time, random, os, translate, filters, platform, transmit
-
+import messaging, grabbers, time, random, os, translate, filters, platform, transmit, calendar
 debug = True
-
 def main():
     if 'Win' in platform.system():
         os.system('cls')
@@ -54,6 +51,7 @@ def main():
 
     # main program endless loop
     run = True
+    scope_sent = False
     print '***Started at %(time)s ***' % \
         {'time':str(time.ctime())}
     print ''
@@ -75,10 +73,18 @@ def main():
                 {'time':str(time.ctime())}
             print
         elif num == 4:
-            transmit.send_scope(current_contact)
-            print 'Horoscope sent at %(time)s' % \
-                {'time':str(time.ctime())}
-            print
+            if scope_sent and (scope_timestamp - calendar.timegm(time.gmtime()) >= 86400):
+                scope_sent = False
+            if not scope_sent:
+                transmit.send_scope(current_contact)
+                print 'Horoscope sent at %(time)s' % \
+                    {'time':str(time.ctime())}
+                scope_sent = True
+                scope_timestamp = calendar.timegm(time.gmtime())
+                print
+            else:
+                print 'Horoscope already sent today, moving on...'
+                print ''
         time.sleep(current_contact.interval)  
 
 if __name__ == '__main__':

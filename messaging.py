@@ -18,8 +18,7 @@ class Contact():
         self.sign = sign
         self.language = language
         self.interval = interval
-        config = open('messaging.cfg')
-        credentials = json.load(config)
+        credentials = json.load(open('messaging.cfg'))
         global credentials 
     
     def send_sms(self,body):

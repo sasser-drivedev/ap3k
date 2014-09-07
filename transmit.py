@@ -1,40 +1,41 @@
-import messaging, grabbers, time, random, os, translate, filters, platform
+import messaging, grabbers, time, random, os, translate, filters, platform, json
 
 # intializing instances of grabbers.source 
+sources_cfg = json.load(open('sources.cfg'))
 
-chuck_norris = grabbers.Source('chuck norris jokes',
-                               'http://api.icndb.com/jokes/random/', 
-                               False,
-                               None,
-                               False,
-                               None)
-dog_pics = grabbers.Source('funny dog pics',
-                           'https://nijikokun-thedogapi.p.mashape.com/random', 
-                           True,
-                           'dog_pics.headers',
-                           False,
-                           None)
-memes = grabbers.Source('memes',
-                        'http://api.lordofthememe.com/v1/posts/random.json', 
-                        False,
-                        None,
-                        False,
-                        None)
-scope = grabbers.Source('Horoscope',
-                        'http://widgets.fabulously40.com/horoscope.json?',
-                        False,
-                        None,
-                        True,
-                        None)
+chuck_norris = grabbers.Source(sources_cfg['chuck_norris']['name'],
+                               sources_cfg['chuck_norris']['url'],
+                               bool(int(sources_cfg['chuck_norris']['headers'])),
+                               sources_cfg['chuck_norris']['header_file'],
+                               bool(int(sources_cfg['chuck_norris']['parameters'])),
+                               sources_cfg['chuck_norris']['parameter_file'])
 
+dog_pics = grabbers.Source(sources_cfg['dog_pics']['name'],
+                               sources_cfg['dog_pics']['url'],
+                               bool(int(sources_cfg['dog_pics']['headers'])),
+                               sources_cfg['dog_pics']['header_file'],
+                               bool(int(sources_cfg['dog_pics']['parameters'])),
+                               sources_cfg['dog_pics']['parameter_file'])
 
+memes = grabbers.Source(sources_cfg['memes']['name'],
+                               sources_cfg['memes']['url'],
+                               bool(int(sources_cfg['memes']['headers'])),
+                               sources_cfg['memes']['header_file'],
+                               bool(int(sources_cfg['memes']['parameters'])),
+                               sources_cfg['memes']['parameter_file'])
+
+scope = grabbers.Source(sources_cfg['scope']['name'],
+                               sources_cfg['scope']['url'],
+                               bool(int(sources_cfg['scope']['headers'])),
+                               sources_cfg['scope']['header_file'],
+                               bool(int(sources_cfg['scope']['parameters'])),
+                               sources_cfg['scope']['parameter_file'])
 
 '''
 send functions 
 these call the grabbers, filters, translators, and use the send_sms and send_email class methods.
 
 '''
-
 def send_joke(name):
     print "fetching joke..." 
     data = chuck_norris.get_source()
