@@ -1,16 +1,30 @@
 
-import messaging, grabbers, time, random, os, translate, filters, platform, transmit, calendar, sqlite3, logging
+import messaging, grabbers, time, random, os, translate, filters, platform, transmit, calendar, sqlite3, logging, json
 from redis import Redis
 from rq import Connection, Queue
+
+run = True
+logging.basicConfig(filename='ap3k.log',level=logging.DEBUG)
 
 if 'Win' in platform.system():
         os.system('cls')
 else:
         os.system('clear')
 
+logging.info('TICKER - Ticker starting at %(time)s ' % \
+             {'time':str(time.ctime())})
+
+# initialize connection to contacts database
+logging.info('TICKER - Connecting to the contacts database...')
 db = sqlite3.connect('ap3k')
 cursor = db.cursor()
-run = True
+logging.info('TICKER - %(db)s made at %(time)s' % \
+             {'db':str(db),'time':str(time.ctime())})
+
+logging.info('TICKER - Ticker READY - %(time)s' % \
+             {'time':str(time.ctime())})
+
+
 scope_sent = False
 scope_timestamp = 1
 
@@ -26,27 +40,35 @@ def tick():
             #transmit.send_joke(current_contact)
             print 'Joke sent to %(name)s at %(time)s' % \
                 {'time':str(time.ctime()), 'name':current_contact.name}
-            print
+            logging.info('TICKER- Joke sent to %(name)s at %(time)s' % \
+                {'time':str(time.ctime()), 'name':current_contact.name})
+            print ''
         elif num == 2:
             #transmit.send_dog_pic(current_contact)
             q.enqueue(transmit.send_dog_pic, current_contact)
             print 'Dog pic to %(name)s at %(time)s' % \
                 {'time':str(time.ctime()), 'name':current_contact.name}
-            print
+            logging.info('TICKER- Dog pic sent to %(name)s at %(time)s' % \
+                {'time':str(time.ctime()), 'name':current_contact.name})
+            print ''
         elif num == 3:
             #transmit.send_meme(current_contact)
             q.enqueue(transmit.send_meme, current_contact)
             print 'Meme sent to %(name)s at %(time)s' % \
                 {'time':str(time.ctime()), 'name':current_contact.name}
-            print
+            logging.info('TICKER- Meme sent to %(name)s at %(time)s' % \
+                {'time':str(time.ctime()), 'name':current_contact.name})
+            print ''
         elif num == 4:
             if scope_sent and (scope_timestamp - calendar.timegm(time.gmtime()) >= 86400):
                 scope_sent = False
             if not scope_sent:
-                transmit.send_scope(current_contact)
+                #transmit.send_scope(current_contact)
                 q.enqueue(transmit.send_scope, current_contact)
                 print 'Horoscope sent to %(name)s at %(time)s' % \
                     {'time':str(time.ctime()), 'name':current_contact.name}
+                logging.info('TICKER- Horoscope sent to %(name)s at %(time)s' % \
+                {'time':str(time.ctime()), 'name':current_contact.name})
                 scope_sent = True
                 scope_timestamp = calendar.timegm(time.gmtime())
                 print
@@ -57,7 +79,8 @@ def tick():
         
         time.sleep(1)
                 
-
 while run:
     tick()
-    time.sleep(5)
+    config = json.load(open('ap3k.cfg'))
+    run = bool(int(config['run']))
+    time.sleep(int(config['ticker']))

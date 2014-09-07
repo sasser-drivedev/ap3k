@@ -1,0 +1,62 @@
+Joke sent to John Sasser at Sun Sep  7 16:02:01 2014
+
+Dog pic to Hayden at Sun Sep  7 16:02:02 2014
+
+Meme sent to Gabby at Sun Sep  7 16:02:03 2014
+
+Dog pic to John Sasser at Sun Sep  7 16:02:09 2014
+
+Dog pic to Hayden at Sun Sep  7 16:02:10 2014
+
+Meme sent to Gabby at Sun Sep  7 16:02:11 2014
+
+Horoscope sent to John Sasser at Sun Sep  7 16:02:17 2014
+
+Dog pic to Hayden at Sun Sep  7 16:02:18 2014
+
+Horoscope already sent today, moving on...
+
+Meme sent to John Sasser at Sun Sep  7 16:02:19 2014
+
+Dog pic to Hayden at Sun Sep  7 16:02:20 2014
+
+Horoscope already sent today, moving on...
+
+Horoscope already sent today, moving on...
+
+Dog pic to John Sasser at Sun Sep  7 16:02:21 2014
+
+Horoscope already sent today, moving on...
+
+Horoscope already sent today, moving on...
+
+Joke sent to John Sasser at Sun Sep  7 16:02:22 2014
+
+Meme sent to Hayden at Sun Sep  7 16:02:23 2014
+
+Joke sent to Gabby at Sun Sep  7 16:02:24 2014
+
+Horoscope already sent today, moving on...
+
+Dog pic to John Sasser at Sun Sep  7 16:02:35 2014
+
+Meme sent to Hayden at Sun Sep  7 16:02:36 2014
+
+Horoscope already sent today, moving on...
+
+Horoscope already sent today, moving on...
+
+Joke sent to John Sasser at Sun Sep  7 16:02:37 2014
+
+Traceback (most recent call last):
+  File "tick.py", line 63, in <module>
+    tick()
+  File "tick.py", line 58, in tick
+    tick()
+  File "tick.py", line 58, in tick
+    tick()
+  File "tick.py", line 58, in tick
+    tick()
+  File "tick.py", line 60, in tick
+    time.sleep(1)
+KeyboardInterrupt
