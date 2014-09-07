@@ -1,4 +1,4 @@
-import messaging, grabbers, time, random, os, translate, filters, platform, json
+import messaging, grabbers, time, random, os, translate, filters, platform, json, logging
 
 # intializing instances of grabbers.source 
 sources_cfg = json.load(open('sources.cfg'))
@@ -37,33 +37,33 @@ these call the grabbers, filters, translators, and use the send_sms and send_ema
 
 '''
 def send_joke(name):
-    print "fetching joke..." 
+    print 'fetching joke...' 
     data = chuck_norris.get_source()
     joke = data['value']['joke']
     joke.encode('ascii','ignore')
-    print "checking for profanity..."  
+    print 'checking for profanity...'  
     is_safe = filters.profanity(joke)
     if is_safe and name.language == 2:
-        print "no profanity detected." 
+        print 'no profanity detected.' 
         print joke
-        print "translating to Spanish...", 
+        print 'translating to Spanish...', 
         es_joke = translate.spanish(joke)
         time.sleep(1)
-        print "Done."
+        print 'Done.'
         print es_joke
         name.send_sms(es_joke)
         name.send_email('Another Check Norris Joke :) ',joke)
     elif not is_safe: 
-        print "profanity detected, joke not sent"
+        print 'profanity detected, joke not sent'
         print ''
     else:
-        print "no profanity detected." 
+        print 'no profanity detected.' 
         print joke
         name.send_sms(joke)
         name.send_email('Another Check Norris Joke :) ',joke)
         
 def send_dog_pic(name):
-    print "fetching hilarious dog pic..." 
+    print 'fetching hilarious dog pic...'
     with open(dog_pics.header_file,'r') as inf:
         api_key = eval(inf.read())
     data = dog_pics.get_source(payload=api_key)
@@ -73,7 +73,7 @@ def send_dog_pic(name):
     name.send_email('Hilarious Dog Enclosed',link)
 
 def send_meme(name):
-    print "fetching meme..." 
+    print 'fetching meme...'
     data = memes.get_source()
     meme = data['post']['image']
     name.send_sms(meme)

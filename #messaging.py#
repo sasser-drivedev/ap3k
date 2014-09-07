@@ -20,9 +20,6 @@ class Contact():
         self.sign = sign
         self.language = language
         self.interval = interval
-        #global credentials 
-        #credentials = json.load(open('messaging.cfg'))
-        
     
     def send_sms(self,body):
         account_sid = credentials['sms']['account_sid']
