@@ -5,14 +5,16 @@ from rq import Connection, Queue
 
 run = True
 logging.basicConfig(filename='ap3k.log',level=logging.DEBUG)
-
 if 'Win' in platform.system():
         os.system('cls')
 else:
         os.system('clear')
 
-logging.info('TICKER - Ticker starting at %(time)s ' % \
-             {'time':str(time.ctime())})
+logging.info('TICKER - Loading config file')
+config = json.load(open('ap3k.cfg'))
+
+
+
 
 # initialize connection to contacts database
 logging.info('TICKER - Connecting to the contacts database...')
@@ -21,8 +23,8 @@ cursor = db.cursor()
 logging.info('TICKER - %(db)s made at %(time)s' % \
              {'db':str(db),'time':str(time.ctime())})
 
-logging.info('TICKER - Ticker READY - %(time)s' % \
-             {'time':str(time.ctime())})
+logging.info('TICKER - Ticker starting at %(time)s at a %(intv)s sec interval' % \
+             {'time':str(time.ctime()),'intv':config['ticker']})
 
 
 scope_sent = False
@@ -35,6 +37,7 @@ def tick():
     for row in cursor:
         current_contact = messaging.Contact(row[0],row[1],row[2],row[3],row[4],row[5])
 	num = random.randint(1,4)
+        num = 1
         if num == 1:
             q.enqueue(transmit.send_joke, current_contact)
             #transmit.send_joke(current_contact)

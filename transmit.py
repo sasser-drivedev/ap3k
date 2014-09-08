@@ -1,7 +1,10 @@
 import messaging, grabbers, time, random, os, translate, filters, platform, json, logging
 
+logging.basicConfig(filename='ap3k.log',level=logging.DEBUG)
+
 # intializing instances of grabbers.source 
 sources_cfg = json.load(open('sources.cfg'))
+logging.info('TRANSMIT - Initializing data sources...')
 
 chuck_norris = grabbers.Source(sources_cfg['chuck_norris']['name'],
                                sources_cfg['chuck_norris']['url'],
@@ -31,71 +34,94 @@ scope = grabbers.Source(sources_cfg['scope']['name'],
                                bool(int(sources_cfg['scope']['parameters'])),
                                sources_cfg['scope']['parameter_file'])
 
+logging.info('TRANSMIT - Data sources initialized at %(time)s' % \
+             {'time':str(time.ctime())})
+
 '''
 send functions 
 these call the grabbers, filters, translators, and use the send_sms and send_email class methods.
 
 '''
 def send_joke(name):
-    print 'fetching joke...' 
+    logging.info('TRANSMIT - Fetching joke...')
     data = chuck_norris.get_source()
     joke = data['value']['joke']
     joke.encode('ascii','ignore')
-    print 'checking for profanity...'  
     is_safe = filters.profanity(joke)
     if is_safe and name.language == 2:
-        print 'no profanity detected.' 
-        print joke
-        print 'translating to Spanish...', 
+        logging.info('TRANSMIT - Joke fetched:')
+        logging.info('TRANSMIT -  %(joke)s' % \
+                      {'joke':joke})
+        logging.info('TRANSMIT - sending dog pic to%(name)s :' % \
+                 {'name':name.name})
         es_joke = translate.spanish(joke)
-        time.sleep(1)
-        print 'Done.'
-        print es_joke
         name.send_sms(es_joke)
         name.send_email('Another Check Norris Joke :) ',joke)
-    elif not is_safe: 
-        print 'profanity detected, joke not sent'
-        print ''
-    else:
-        print 'no profanity detected.' 
-        print joke
+        logging.info('TRANSMIT - Joke sent to %(name)s at %(time)s' % \
+                {'time':str(time.ctime()), 'name':name.name})
+    elif is_safe:
+        logging.info('TRANSMIT - Joke fetched:')
+        logging.info('TRANSMIT -  %(joke)s' % \
+                      {'joke':joke})
+        logging.info('TRANSMIT - sending dog pic to%(name)s :' % \
+                 {'name':name.name})
         name.send_sms(joke)
         name.send_email('Another Check Norris Joke :) ',joke)
+        logging.info('TRANSMIT - Joke sent to %(name)s at %(time)s' % \
+                {'time':str(time.ctime()), 'name':name.name})
         
 def send_dog_pic(name):
-    print 'fetching hilarious dog pic...'
+    logging.info('TRANSMIT - fetching hilarious dog pic...')
     with open(dog_pics.header_file,'r') as inf:
         api_key = eval(inf.read())
     data = dog_pics.get_source(payload=api_key)
     link = data['source']
-    print link
+    logging.info('TRANSMIT - dog pic fetched:')
+    logging.info('TRANSMIT - %(link)s' % \
+                 {'link':link})
+    logging.info('TRANSMIT - sending dog pic to%(name)s :' % \
+                 {'name':name.name})
     name.send_sms(link)
     name.send_email('Hilarious Dog Enclosed',link)
+    logging.info('TRANSMIT - Dog pic sent to %(name)s at %(time)s' % \
+                {'time':str(time.ctime()), 'name':name.name})
 
 def send_meme(name):
-    print 'fetching meme...'
+    logging.info('TRANSMIT - fetching meme...')
     data = memes.get_source()
     meme = data['post']['image']
+    logging.info('TRANSMIT - Meme fetched:')
+    logging.info('TRANSMIT - %(meme)s' % \
+                 {'meme':meme})
+    logging.info('TRANSMIT - sending meme to%(name)s :' % \
+                 {'name':name.name})
+    name.send_sms(link)
     name.send_sms(meme)
     name.send_email('Check this out..',meme)
-    print meme
+    logging.info('TRANSMIT - Meme sent to %(name)s at %(time)s' % \
+                {'time':str(time.ctime()), 'name':name.name})
 
 def send_scope(name):
-    print 'fetching horoscope...'
+    logging.info('TRANSMIT - fetching horoscope...')
     sign = {'sign':name.sign}
     data = scope.get_source(payload=sign)
     horoscope = data['horoscope']['horoscope']
     horoscope = horoscope.encode('ascii','ignore')
+    logging.info('TRANSMIT - Horoscope fetched:')
     if name.language == 2:
-        print horoscope
-        print 'Translating to Spanish...'
         es_horoscope = translate.spanish(horoscope)
         es_horoscope = es_horoscope.encode('ascii','ignore')
-        print es_horoscope
+        logging.info('TRANSMIT - %(scope)s' % \
+                      {'scope':es_horoscope})
+        logging.info('TRANSMIT - sending horoscope to%(name)s :' % \
+                 {'name':name.name})
         name.send_sms(es_horoscope)
         name.send_email('Your horoscope...',es_horoscope)
     else:
-        print horoscope
+        logging.info('TRANSMIT - %(scope)s' % \
+                      {'scope':horoscope})
+        logging.info('TRANSMIT - sending horoscope to%(name)s :' % \
+                 {'name':name.name})
         name.send_sms(horoscope)
         name.send_email('Your horoscope...',horoscope)
     
