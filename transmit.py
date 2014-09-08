@@ -56,7 +56,7 @@ def send_joke(name):
                  {'name':name.name})
         es_joke = translate.spanish(joke)
         name.send_sms(es_joke)
-        name.send_email('Another Check Norris Joke :) ',joke)
+        #name.send_email('Another Check Norris Joke :) ',joke)
         logging.info('TRANSMIT - Joke sent to %(name)s at %(time)s' % \
                 {'time':str(time.ctime()), 'name':name.name})
     elif is_safe:
@@ -66,7 +66,7 @@ def send_joke(name):
         logging.info('TRANSMIT - sending dog pic to%(name)s :' % \
                  {'name':name.name})
         name.send_sms(joke)
-        name.send_email('Another Check Norris Joke :) ',joke)
+        #name.send_email('Another Check Norris Joke :) ',joke)
         logging.info('TRANSMIT - Joke sent to %(name)s at %(time)s' % \
                 {'time':str(time.ctime()), 'name':name.name})
         
@@ -82,7 +82,7 @@ def send_dog_pic(name):
     logging.info('TRANSMIT - sending dog pic to%(name)s :' % \
                  {'name':name.name})
     name.send_sms(link)
-    name.send_email('Hilarious Dog Enclosed',link)
+    #name.send_email('Hilarious Dog Enclosed',link)
     logging.info('TRANSMIT - Dog pic sent to %(name)s at %(time)s' % \
                 {'time':str(time.ctime()), 'name':name.name})
 
@@ -93,11 +93,10 @@ def send_meme(name):
     logging.info('TRANSMIT - Meme fetched:')
     logging.info('TRANSMIT - %(meme)s' % \
                  {'meme':meme})
-    logging.info('TRANSMIT - sending meme to%(name)s :' % \
+    logging.info('TRANSMIT - sending meme to %(name)s :' % \
                  {'name':name.name})
-    name.send_sms(link)
     name.send_sms(meme)
-    name.send_email('Check this out..',meme)
+    #name.send_email('Check this out..',meme)
     logging.info('TRANSMIT - Meme sent to %(name)s at %(time)s' % \
                 {'time':str(time.ctime()), 'name':name.name})
 
@@ -116,12 +115,12 @@ def send_scope(name):
         logging.info('TRANSMIT - sending horoscope to%(name)s :' % \
                  {'name':name.name})
         name.send_sms(es_horoscope)
-        name.send_email('Your horoscope...',es_horoscope)
+        #name.send_email('Your horoscope...',es_horoscope)
     else:
         logging.info('TRANSMIT - %(scope)s' % \
                       {'scope':horoscope})
         logging.info('TRANSMIT - sending horoscope to%(name)s :' % \
                  {'name':name.name})
         name.send_sms(horoscope)
-        name.send_email('Your horoscope...',horoscope)
+        #name.send_email('Your horoscope...',horoscope)
     

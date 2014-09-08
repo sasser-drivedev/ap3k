@@ -13,16 +13,13 @@ import smtplib, json
 credentials = json.load(open('messaging.cfg'))
 
 class Contact():
-    def __init__(self, name, sms_number, email_address, sign, language, interval):
+    def __init__(self, name, sms_number, email_address, sign, language, interval,scope_sent):
         self.name = name
         self.to = sms_number
         self.email = email_address
         self.sign = sign
         self.language = language
         self.interval = interval
-        #global credentials 
-        #credentials = json.load(open('messaging.cfg'))
-        
     
     def send_sms(self,body):
         account_sid = credentials['sms']['account_sid']
