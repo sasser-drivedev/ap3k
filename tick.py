@@ -13,12 +13,11 @@ else:
 logging.info('TICKER - Loading config file')
 print('TICKER - Loading config file')
 config = json.load(open('ap3k.cfg'))
-
-# initialize connection to contacts database
 logging.info('TICKER - Connecting to the contacts database...')
 print('TICKER - Connecting to the contacts database...')
 db = sqlite3.connect('ap3k')
-cursor = db.cursor()
+cursor = db.cursor()   
+
 logging.info('TICKER - %(db)s made at %(time)s' % \
              {'db':str(db),'time':str(time.ctime())})
 print('TICKER - %(db)s made at %(time)s' % \
@@ -32,8 +31,10 @@ scope_sent = False
 scope_timestamp = 1
 #go = True
 def tick():
+    
     global scope_sent, scope_timestamp
-    print('.')
+    print ('TICKER - tick started at %(time)s' % \
+            {'time':str(time.ctime())})
     q = Queue(connection=Redis())
     cursor.execute('''SELECT name, phone, email, sign, language, interval, timestamp FROM contacts''')
     for row in cursor:
@@ -41,16 +42,18 @@ def tick():
 	timestamp = row[6]
         current_time = int(calendar.timegm(time.gmtime()))
         interval = current_contact.interval*60
-        print current_time - timestamp
-        print interval
-        
+        next_send = int(interval - (current_time - timestamp))
         if current_time - timestamp >= interval:
                 go = True
+                print ('TICKER - Contact: %(name)s - Interval: %(int)s mins - Transmission SENT at %(time)s' % \
+                       {'name':current_contact.name,'int':current_contact.interval,'time':str(time.ctime())})
                 cursor.execute('''UPDATE contacts SET timestamp = ? WHERE name = ? ''', 
                        (current_time, current_contact.name))
                 
         else:
                 go = False
+                print ('TICKER - Contact: %(name)s - Interval: %(int)s mins - NOTHING SENT - Next Transmission in %(next)s seconds' % \
+                       {'name':current_contact.name,'int':current_contact.interval,'next':next_send})
         num = random.randint(1,4)
         #num = 1
         if num == 1 and go:
@@ -71,8 +74,10 @@ def tick():
                 print 'Horoscope already sent today, moving on...'
                 print ''
                 tick()
-        
-        time.sleep(1)
+    db.commit()    
+    print ('TICKER - tick ended at %(time)s' % \
+            {'time':str(time.ctime())})
+    
                 
 while run:
     tick()
